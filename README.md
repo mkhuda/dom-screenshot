@@ -1,20 +1,24 @@
 # dom-screenshot
 DOM screenshot by dom-to-image forked & modified from [dom-to-image](https://github.com/tsayen/dom-to-image)
 
-## Added Fix:
-- Add encodeURIComponent on makeSvgDataUri. Based on (this)[https://github.com/tsayen/dom-to-image/issues/78] issue
+## Added & Fix:
+- Change to rollup build
+- Add encodeURIComponent on makeSvgDataUri. Based on [this](https://github.com/tsayen/dom-to-image/issues/78) issue
 - Add Typescript support, (.d.ts) battery included.
+
+## TODO:
+- Adding `chai` test (on progress).
 
 ## Usages (React)
 ```typescript
-import DomToImage from "@mkhuda/dom-screenshot";
+import DomScreenshot from "@mkhuda/dom-screenshot";
 ....
 
 return(
     <button
         onClick={() => {
           const getElement = document.getElementById("root") as HTMLElement;
-          const image = DomToImage.toPng(document.body, {});
+          const image = DomScreenshot.toPng(document.body, {});
           image.then((generatedImage) => {
             window.open(generatedImage);
           });
