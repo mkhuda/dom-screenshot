@@ -1,4 +1,6 @@
 # dom-screenshot
+[![Build Status](https://app.travis-ci.com/mkhuda/dom-screenshot.svg?branch=main)](https://app.travis-ci.com/mkhuda/dom-screenshot) [![npm version](https://badge.fury.io/js/%40mkhuda%2Fdom-screenshot.svg)](https://badge.fury.io/js/%40mkhuda%2Fdom-screenshot)
+
 DOM screenshot by dom-to-image forked & modified from [dom-to-image](https://github.com/tsayen/dom-to-image)
 
 ## Added & Fix:
