@@ -3,12 +3,22 @@
 
 DOM screenshot by dom-to-image forked & modified from [dom-to-image](https://github.com/tsayen/dom-to-image)
 
+## Install
+```bash
+# YARN
+yarn add @mkhuda/dom-screenshot
+# NPM
+npm install @mkhuda/dom-screenshot
+```
+
+
 ## Added & Fix:
 - Change to rollup build
 - Add encodeURIComponent on makeSvgDataUri. Based on [this](https://github.com/tsayen/dom-to-image/issues/78) issue
 - Add Typescript support, (.d.ts) battery included.
 
-## TODO:
+## TODO (on progress):
+- Full rewrite to Typescript
 - Adding `chai` test (on progress).
 
 ## Usages (React)
