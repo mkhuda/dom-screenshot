@@ -1,0 +1,46 @@
+{
+    "name": "@mkhuda/dom-screenshot",
+    "version": "0.0.1",
+    "description": "DOM screenshot by dom-to-image",
+    "main": "dist/dom-screenshot.min.js",
+    "types": "dist/dom-screenshot.d.ts",
+    "author": "Muhammad K. Huda",
+    "license": "MIT",
+    "scripts": {
+        "nodeminify": "node ./node_modules/.bin/node-minify",
+        "build": "rimraf dist && rollup -c --perf",
+        "build-dts": "npx -p typescript tsc src/dom-screenshot.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+        "start": "yarn build",
+        "test": "jest",
+        "watch": "rollup -c --watch"
+    },
+    "devDependencies": {
+        "prettier": "^2.3.2",
+        "rimraf": "^3.0.2",
+        "rollup": "^2.56.3",
+        "rollup-plugin-copy": "^3.4.0",
+        "rollup-plugin-terser": "^7.0.2",
+        "tslib": "^2.3.1",
+        "typescript": "^4.3.5"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mkhuda/dom-screenshot.git"
+    },
+    "bugs": {
+        "url": "https://github.com/mkhuda/dom-screenshot/issues"
+    },
+    "homepage": "https://github.com/mkhuda/dom-screenshot#readme",
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "keywords": [
+        "dom",
+        "screenshot",
+        "capture",
+        "image",
+        "dom-to-image"
+    ],
+    "dependencies": {}
+}

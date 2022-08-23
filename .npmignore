@@ -1,0 +1,4 @@
+src/
+types/
+.prettierrc
+yarn-error.log
