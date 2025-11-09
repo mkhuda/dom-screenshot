@@ -19,6 +19,9 @@ const defaultOptions = {
   cacheBust: false,
 };
 
+// Placeholder for circular dependency resolution
+let domtoimageInstance: any = null;
+
 /**
  * Main domtoimage module export
  */
@@ -28,14 +31,20 @@ export const domtoimage = {
   toJpeg,
   toBlob,
   toPixelData,
-  impl: {
-    fontFaces: newFontFaces(),
-    images: newImages(),
-    util: newUtil(),
-    inliner: newInliner(),
-    options: {} as { imagePlaceholder?: string; cacheBust?: boolean },
-  },
+  impl: {} as any, // Will be populated after object creation
 };
+
+// Store reference for circular dependency resolution
+domtoimageInstance = domtoimage;
+
+// Initialize implementation after domtoimage object exists
+Object.assign(domtoimage.impl, {
+  fontFaces: newFontFaces(),
+  images: newImages(),
+  util: newUtil(),
+  inliner: newInliner(),
+  options: {} as { imagePlaceholder?: string; cacheBust?: boolean },
+});
 
 // Export individual functions for ESM usage
 export { toSvg, toPng, toJpeg, toBlob, toPixelData };
@@ -784,9 +793,6 @@ function newInliner(): Inliner {
 // ============================================================================
 
 function newFontFaces(): FontFaces {
-  const inliner = domtoimage.impl.inliner;
-  const util = domtoimage.impl.util;
-
   return {
     resolveAll,
     impl: {
@@ -809,6 +815,7 @@ function newFontFaces(): FontFaces {
   }
 
   function readAll(): Promise<WebFont[]> {
+    const util = domtoimage.impl.util;
     return Promise.resolve(util.asArray(document.styleSheets))
       .then(getCssRules)
       .then(selectWebFontRules)
@@ -819,6 +826,7 @@ function newFontFaces(): FontFaces {
     function selectWebFontRules(
       cssRules: CSSRule[]
     ): CSSFontFaceRule[] {
+      const inliner = domtoimage.impl.inliner;
       return cssRules
         .filter((rule): rule is CSSFontFaceRule => {
           return rule.type === CSSRule.FONT_FACE_RULE;
@@ -852,6 +860,7 @@ function newFontFaces(): FontFaces {
       return {
         resolve(): Promise<string> {
           const baseUrl = (webFontRule.parentStyleSheet as CSSStyleSheet)?.href;
+          const inliner = domtoimage.impl.inliner;
           return inliner.inlineAll(webFontRule.cssText, baseUrl);
         },
         src(): string {
@@ -867,9 +876,6 @@ function newFontFaces(): FontFaces {
 // ============================================================================
 
 function newImages(): Images {
-  const util = domtoimage.impl.util;
-  const inliner = domtoimage.impl.inliner;
-
   return {
     inlineAll,
     impl: {
@@ -883,6 +889,7 @@ function newImages(): Images {
     };
 
     function inline(get?: GetAndEncodeCallback): Promise<void> {
+      const util = domtoimage.impl.util;
       if (util.isDataUrl(element.src)) return Promise.resolve();
 
       return Promise.resolve(element.src)
@@ -909,6 +916,7 @@ function newImages(): Images {
   function inlineAll(node: Node): Promise<Node> {
     if (!(node instanceof Element)) return Promise.resolve(node);
 
+    const util = domtoimage.impl.util;
     return inlineBackground(node).then(() => {
       if (node instanceof HTMLImageElement) return newImage(node).inline();
       else
@@ -926,6 +934,7 @@ function newImages(): Images {
 
       if (!background) return Promise.resolve(undefined);
 
+      const inliner = domtoimage.impl.inliner;
       return inliner
         .inlineAll(background)
         .then((inlined) => {
