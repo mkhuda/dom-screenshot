@@ -1,6 +1,6 @@
 {
   "name": "@mkhuda/dom-screenshot",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "DOM screenshot by dom-to-image",
   "type": "module",
   "main": "dist/dom-screenshot.esm.js",
