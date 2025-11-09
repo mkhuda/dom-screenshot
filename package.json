@@ -15,7 +15,6 @@
   },
   "author": "Muhammad K. Huda",
   "license": "MIT",
-  "private": true,
   "volta": {
     "node": "22.12.0"
   },
