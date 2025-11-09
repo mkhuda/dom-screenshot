@@ -1,45 +1,75 @@
 {
-    "name": "@mkhuda/dom-screenshot",
-    "version": "0.0.2",
-    "description": "DOM screenshot by dom-to-image",
-    "main": "dist/dom-screenshot.min.js",
-    "types": "dist/dom-screenshot.d.ts",
-    "author": "Muhammad K. Huda",
-    "license": "MIT",
-    "scripts": {
-        "nodeminify": "node ./node_modules/.bin/node-minify",
-        "build": "rimraf dist && rollup -c --perf",
-        "build-dts": "npx -p typescript tsc src/dom-screenshot.js --declaration --allowJs --emitDeclarationOnly --outDir types",
-        "start": "yarn build",
-        "watch": "rollup -c --watch"
-    },
-    "devDependencies": {
-        "prettier": "^2.3.2",
-        "rimraf": "^3.0.2",
-        "rollup": "^2.56.3",
-        "rollup-plugin-copy": "^3.4.0",
-        "rollup-plugin-terser": "^7.0.2",
-        "tslib": "^2.3.1",
-        "typescript": "^4.3.5"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mkhuda/dom-screenshot.git"
-    },
-    "bugs": {
-        "url": "https://github.com/mkhuda/dom-screenshot/issues"
-    },
-    "homepage": "https://github.com/mkhuda/dom-screenshot#readme",
-    "publishConfig": {
-        "access": "public",
-        "registry": "https://registry.npmjs.org/"
-    },
-    "keywords": [
-        "dom",
-        "screenshot",
-        "capture",
-        "image",
-        "dom-to-image"
-    ],
-    "dependencies": {}
+  "name": "@mkhuda/dom-screenshot",
+  "version": "1.0.0",
+  "description": "DOM screenshot by dom-to-image",
+  "type": "module",
+  "main": "dist/dom-screenshot.esm.js",
+  "module": "dist/dom-screenshot.esm.js",
+  "types": "dist/dom-screenshot.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/dom-screenshot.esm.js",
+      "require": "./dist/dom-screenshot.min.js",
+      "types": "./dist/dom-screenshot.d.ts"
+    }
+  },
+  "author": "Muhammad K. Huda",
+  "license": "MIT",
+  "private": true,
+  "volta": {
+    "node": "22.12.0"
+  },
+  "workspaces": [
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "rimraf dist && rollup -c --perf",
+    "watch": "rollup -c --watch",
+    "start": "npm run build",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
+    "example:dev": "cd examples/react-app && npm run dev",
+    "example:build": "cd examples/react-app && npm run build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@testing-library/dom": "^10.4.1",
+    "@vitest/coverage-v8": "^4.0.8",
+    "@vitest/ui": "^4.0.8",
+    "chai": "^6.2.0",
+    "chai-as-promised": "^8.0.2",
+    "jsdom": "^27.1.0",
+    "nock": "^14.0.10",
+    "prettier": "^3.6.2",
+    "rimraf": "^5.0.10",
+    "rollup": "^4.53.1",
+    "rollup-plugin-copy": "^3.5.0",
+    "sinon": "^21.0.0",
+    "tslib": "^2.3.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkhuda/dom-screenshot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mkhuda/dom-screenshot/issues"
+  },
+  "homepage": "https://github.com/mkhuda/dom-screenshot#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "dom",
+    "screenshot",
+    "capture",
+    "image",
+    "dom-to-image"
+  ]
 }
