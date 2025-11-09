@@ -1,6 +1,6 @@
 {
   "name": "@mkhuda/dom-screenshot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "DOM screenshot by dom-to-image",
   "type": "module",
   "main": "dist/dom-screenshot.esm.js",
@@ -8,9 +8,9 @@
   "types": "dist/dom-screenshot.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/dom-screenshot.d.ts",
       "import": "./dist/dom-screenshot.esm.js",
-      "require": "./dist/dom-screenshot.min.js",
-      "types": "./dist/dom-screenshot.d.ts"
+      "require": "./dist/dom-screenshot.min.js"
     }
   },
   "author": "Muhammad K. Huda",
@@ -71,5 +71,8 @@
     "capture",
     "image",
     "dom-to-image"
-  ]
+  ],
+  "dependencies": {
+    "braces": "^3.0.3"
+  }
 }
