@@ -2,6 +2,8 @@ import { expect, afterEach, beforeEach, vi } from 'vitest';
 import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
+import { mockCanvasToDataUrl, mockCanvasToBlob, setupCanvasMocking, createValidPngDataUrl, createValidJpegDataUrl } from './mocks/canvas-mock';
+import { mockImageSuccess, mockFileReaderDataUrl } from './mocks/image-mock';
 
 /**
  * Setup Chai with Promise support
@@ -16,10 +18,21 @@ declare global {
 }
 
 /**
- * Before each test: create a fresh sandbox
+ * Before each test: create a fresh sandbox and setup Canvas/Image mocks
  */
 beforeEach(() => {
   global.sandbox = sinon.createSandbox();
+
+  // Auto-setup Canvas mocking
+  setupCanvasMocking();
+  mockCanvasToDataUrl(createValidPngDataUrl());
+  mockCanvasToBlob();
+
+  // Auto-setup Image mocking
+  mockImageSuccess(5);
+
+  // Auto-setup FileReader for data URL conversion
+  mockFileReaderDataUrl(createValidPngDataUrl());
 });
 
 /**

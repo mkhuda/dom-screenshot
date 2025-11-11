@@ -1,13 +1,10 @@
 /**
  * Basic unit tests for dom-screenshot
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { domtoimage } from '../../dist/dom-screenshot.esm.js';
-import { createSimpleDiv, createStyledDiv, wait } from '../helpers/dom-helpers';
-import { mockCanvasToDataUrl, createValidPngDataUrl, createValidSvgDataUrl } from '../mocks/canvas-mock';
-import { mockImageSuccess } from '../mocks/image-mock';
-import { PNG_1X1_TRANSPARENT, SVG_CIRCLE } from '../fixtures/images';
-import { SIMPLE_HTML, STYLED_HTML } from '../fixtures/html';
+import { createSimpleDiv, createStyledDiv } from '../helpers/dom-helpers';
+import { SIMPLE_HTML } from '../fixtures/html';
 
 describe('DOM Screenshot - Basic Tests', () => {
   let container: HTMLElement;
@@ -113,18 +110,15 @@ describe('DOM Screenshot - Basic Tests', () => {
     });
   });
 
-  // Canvas-based tests are disabled until Image mocking can be properly implemented
-  // The library works correctly - these tests require more advanced Canvas/Image mocking
-
   describe('toPng', () => {
-    it.skip('should convert div to PNG data URL', async () => {
+    it('should convert div to PNG data URL', async () => {
       const div = createSimpleDiv('Test');
       const png = await domtoimage.toPng(div);
 
       expect(png).toBeValidPngDataUrl();
     });
 
-    it.skip('should return valid image data URL', async () => {
+    it('should return valid image data URL', async () => {
       const div = createSimpleDiv('PNG Test');
       const png = await domtoimage.toPng(div);
 
@@ -132,7 +126,7 @@ describe('DOM Screenshot - Basic Tests', () => {
       expect(png).toContain('base64');
     });
 
-    it.skip('should handle styled content for PNG', async () => {
+    it('should handle styled content for PNG', async () => {
       const div = createStyledDiv('Colored', {
         backgroundColor: 'red',
         color: 'white',
@@ -144,7 +138,7 @@ describe('DOM Screenshot - Basic Tests', () => {
   });
 
   describe('toJpeg', () => {
-    it.skip('should convert div to JPEG data URL', async () => {
+    it('should convert div to JPEG data URL', async () => {
       const div = createSimpleDiv('Test');
       const jpeg = await domtoimage.toJpeg(div);
 
@@ -152,7 +146,7 @@ describe('DOM Screenshot - Basic Tests', () => {
       expect(jpeg).toMatch(/^data:image\/jpeg/);
     });
 
-    it.skip('should respect quality option', async () => {
+    it('should respect quality option', async () => {
       const div = createSimpleDiv('Test');
       const jpegHQ = await domtoimage.toJpeg(div, { quality: 1.0 });
       const jpegLQ = await domtoimage.toJpeg(div, { quality: 0.5 });
@@ -161,7 +155,7 @@ describe('DOM Screenshot - Basic Tests', () => {
       expect(jpegLQ).toBeDefined();
     });
 
-    it.skip('should default to quality 1.0', async () => {
+    it('should default to quality 1.0', async () => {
       const div = createSimpleDiv('Test');
       const jpeg = await domtoimage.toJpeg(div);
 
@@ -171,7 +165,7 @@ describe('DOM Screenshot - Basic Tests', () => {
   });
 
   describe('toBlob', () => {
-    it.skip('should convert div to Blob', async () => {
+    it('should convert div to Blob', async () => {
       const div = createSimpleDiv('Test');
       const blob = await domtoimage.toBlob(div);
 
@@ -179,14 +173,14 @@ describe('DOM Screenshot - Basic Tests', () => {
       expect(blob.type).toContain('image');
     });
 
-    it.skip('should return Blob with correct MIME type', async () => {
+    it('should return Blob with correct MIME type', async () => {
       const div = createSimpleDiv('Test');
       const blob = await domtoimage.toBlob(div);
 
       expect(blob.type).toMatch(/^image\//);
     });
 
-    it.skip('should handle blob conversion options', async () => {
+    it('should handle blob conversion options', async () => {
       const div = createSimpleDiv('Test');
       const blob = await domtoimage.toBlob(div, { width: 200, height: 150 });
 
@@ -195,14 +189,14 @@ describe('DOM Screenshot - Basic Tests', () => {
   });
 
   describe('toPixelData', () => {
-    it.skip('should extract pixel data', async () => {
+    it('should extract pixel data', async () => {
       const div = createSimpleDiv('Test');
       const pixelData = await domtoimage.toPixelData(div);
 
       expect(pixelData).toBeInstanceOf(Uint8ClampedArray);
     });
 
-    it.skip('should return valid RGBA pixel data', async () => {
+    it('should return valid RGBA pixel data', async () => {
       const div = createSimpleDiv('Test');
       const pixelData = await domtoimage.toPixelData(div);
 
