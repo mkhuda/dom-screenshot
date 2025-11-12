@@ -23,9 +23,21 @@ const defaultOptions = {
 let domtoimageInstance: any = null;
 
 /**
+ * Type definition for domtoimage module
+ */
+interface DomToImage {
+  toSvg(node: Node, options?: DomScreenshotOptions): Promise<string>;
+  toPng(node: Node, options?: DomScreenshotOptions): Promise<string>;
+  toJpeg(node: Node, options?: DomScreenshotOptions): Promise<string>;
+  toBlob(node: Node, options?: DomScreenshotOptions): Promise<Blob>;
+  toPixelData(node: Node, options?: DomScreenshotOptions): Promise<Uint8ClampedArray>;
+  impl: Implementation;
+}
+
+/**
  * Main domtoimage module export
  */
-export const domtoimage = {
+export const domtoimage: DomToImage = {
   toSvg,
   toPng,
   toJpeg,
@@ -52,7 +64,7 @@ export { toSvg, toPng, toJpeg, toBlob, toPixelData };
 /**
  * Render DOM node to SVG data URL
  * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with a SVG image data URL
  */
 function toSvg(node: Node, options?: DomScreenshotOptions): Promise<string> {
@@ -60,8 +72,8 @@ function toSvg(node: Node, options?: DomScreenshotOptions): Promise<string> {
   copyOptions(options);
   return Promise.resolve(node)
     .then((node) => cloneNode(node, options!.filter, true))
-    .then(embedFonts)
-    .then(inlineImages)
+    .then((cloned) => embedFonts(cloned as Node))
+    .then((embedded) => inlineImages(embedded as Node))
     .then(applyOptions)
     .then((clone) => {
       const util = domtoimage.impl.util;
@@ -96,7 +108,7 @@ function toSvg(node: Node, options?: DomScreenshotOptions): Promise<string> {
 /**
  * Render DOM node to PNG data URL
  * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with a PNG image data URL
  */
 function toPng(node: Node, options?: DomScreenshotOptions): Promise<string> {
@@ -106,9 +118,7 @@ function toPng(node: Node, options?: DomScreenshotOptions): Promise<string> {
 }
 
 /**
- * Render DOM node to JPEG data URL
- * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with a JPEG image data URL
  */
 function toJpeg(node: Node, options?: DomScreenshotOptions): Promise<string> {
@@ -121,7 +131,7 @@ function toJpeg(node: Node, options?: DomScreenshotOptions): Promise<string> {
 /**
  * Render DOM node to Blob
  * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with a Blob
  */
 function toBlob(node: Node, options?: DomScreenshotOptions): Promise<Blob> {
@@ -134,7 +144,7 @@ function toBlob(node: Node, options?: DomScreenshotOptions): Promise<Blob> {
 /**
  * Render DOM node to PixelData
  * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with pixel data array
  */
 function toPixelData(
@@ -859,7 +869,7 @@ function newFontFaces(): FontFaces {
     function newWebFont(webFontRule: CSSFontFaceRule): WebFont {
       return {
         resolve(): Promise<string> {
-          const baseUrl = (webFontRule.parentStyleSheet as CSSStyleSheet)?.href;
+          const baseUrl = (webFontRule.parentStyleSheet as CSSStyleSheet)?.href ?? undefined;
           const inliner = domtoimage.impl.inliner;
           return inliner.inlineAll(webFontRule.cssText, baseUrl);
         },
@@ -918,13 +928,15 @@ function newImages(): Images {
 
     const util = domtoimage.impl.util;
     return inlineBackground(node).then(() => {
-      if (node instanceof HTMLImageElement) return newImage(node).inline();
-      else
+      if (node instanceof HTMLImageElement) {
+        return newImage(node).inline().then(() => node);
+      } else {
         return Promise.all(
           util.asArray(node.childNodes).map((child) => {
             return inlineAll(child);
           })
-        ).then(() => undefined);
+        ).then(() => node);
+      }
     });
 
     function inlineBackground(node: Node): Promise<undefined> {

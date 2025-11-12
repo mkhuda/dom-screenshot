@@ -39,7 +39,7 @@ export function mockCanvasToBlob(
  * Setup global Canvas context mocking
  */
 export function setupCanvasMocking(): void {
-  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function(contextId: string) {
+  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function(this: HTMLCanvasElement, contextId: string) {
     return {
       fillRect: vi.fn(),
       drawImage: vi.fn(),
