@@ -1,7 +1,8 @@
 /**
  * XMLHttpRequest mocking utilities for testing
  */
-import { vi, SinonStub } from 'vitest';
+import { vi } from 'vitest';
+import type { SinonStub } from 'sinon';
 
 /**
  * Mock XMLHttpRequest with success response
@@ -44,9 +45,10 @@ export function mockXhrSuccess(
     withCredentials: false,
   }));
 
-  const stub = vi.spyOn(window, 'XMLHttpRequest' as any).mockImplementation(XhrStub);
+  const stub = vi.spyOn(window, 'XMLHttpRequest' as any);
+  (stub as any).mockImplementation(XhrStub);
 
-  return stub;
+  return stub as any;
 }
 
 /**
@@ -88,9 +90,10 @@ export function mockXhrError(
     withCredentials: false,
   }));
 
-  const stub = vi.spyOn(window, 'XMLHttpRequest' as any).mockImplementation(XhrStub);
+  const stub = vi.spyOn(window, 'XMLHttpRequest' as any);
+  (stub as any).mockImplementation(XhrStub);
 
-  return stub;
+  return stub as any;
 }
 
 /**
@@ -128,9 +131,10 @@ export function mockXhrTimeout(
     withCredentials: false,
   }));
 
-  const stub = vi.spyOn(window, 'XMLHttpRequest' as any).mockImplementation(XhrStub);
+  const stub = vi.spyOn(window, 'XMLHttpRequest' as any);
+  (stub as any).mockImplementation(XhrStub);
 
-  return stub;
+  return stub as any;
 }
 
 /**
@@ -160,13 +164,14 @@ export function stubUrlPattern(
 
   const setRequestHeader = vi.fn();
 
-  const XhrStub = vi.fn(function () {
+  const XhrStub = vi.fn(function (this: any) {
     return {
       open: open.mockImplementation(function (
+        this: XMLHttpRequest,
         _method: string,
         url: string
       ) {
-        this.url = url;
+        (this as any).url = url;
       }),
       send,
       setRequestHeader,
@@ -184,7 +189,10 @@ export function stubUrlPattern(
     };
   });
 
-  return vi.spyOn(window, 'XMLHttpRequest' as any).mockImplementation(XhrStub);
+  const stub = vi.spyOn(window, 'XMLHttpRequest' as any);
+  (stub as any).mockImplementation(XhrStub);
+
+  return stub as any;
 }
 
 /**

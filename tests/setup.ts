@@ -2,6 +2,8 @@ import { expect, afterEach, beforeEach, vi } from 'vitest';
 import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
+import { mockCanvasToDataUrl, mockCanvasToBlob, setupCanvasMocking, createValidPngDataUrl, createValidJpegDataUrl } from './mocks/canvas-mock';
+import { mockImageSuccess, mockFileReaderDataUrl } from './mocks/image-mock';
 
 /**
  * Setup Chai with Promise support
@@ -16,10 +18,21 @@ declare global {
 }
 
 /**
- * Before each test: create a fresh sandbox
+ * Before each test: create a fresh sandbox and setup Canvas/Image mocks
  */
 beforeEach(() => {
   global.sandbox = sinon.createSandbox();
+
+  // Auto-setup Canvas mocking
+  setupCanvasMocking();
+  mockCanvasToDataUrl(createValidPngDataUrl());
+  mockCanvasToBlob();
+
+  // Auto-setup Image mocking
+  mockImageSuccess(5);
+
+  // Auto-setup FileReader for data URL conversion
+  mockFileReaderDataUrl(createValidPngDataUrl());
 });
 
 /**
@@ -50,54 +63,48 @@ if (typeof global.XMLHttpRequest === 'undefined') {
 }
 
 /**
- * Extend expect with custom matchers
+ * Extend Chai with custom assertion methods
  */
-expect.extend({
-  toBeValidDataUrl(received: string) {
-    const isDataUrl =
-      typeof received === 'string' && received.startsWith('data:');
-    return {
-      pass: isDataUrl,
-      message: () =>
-        isDataUrl
-          ? `expected ${received} not to be a valid data URL`
-          : `expected ${received} to be a valid data URL (should start with 'data:')`,
-    };
-  },
-  toBeValidSvgDataUrl(received: string) {
-    const isSvgDataUrl =
-      typeof received === 'string' &&
-      received.startsWith('data:image/svg+xml');
-    return {
-      pass: isSvgDataUrl,
-      message: () =>
-        isSvgDataUrl
-          ? `expected ${received} not to be a valid SVG data URL`
-          : `expected ${received} to be a valid SVG data URL (should start with 'data:image/svg+xml')`,
-    };
-  },
-  toBeValidPngDataUrl(received: string) {
-    const isPngDataUrl =
-      typeof received === 'string' && received.startsWith('data:image/png');
-    return {
-      pass: isPngDataUrl,
-      message: () =>
-        isPngDataUrl
-          ? `expected ${received} not to be a valid PNG data URL`
-          : `expected ${received} to be a valid PNG data URL (should start with 'data:image/png')`,
-    };
-  },
+chai.Assertion.addMethod('toBeValidDataUrl', function() {
+  const isDataUrl =
+    typeof this._obj === 'string' && this._obj.startsWith('data:');
+  this.assert(
+    isDataUrl,
+    'expected #{this} to be a valid data URL (should start with "data:")',
+    'expected #{this} not to be a valid data URL'
+  );
+});
+
+chai.Assertion.addMethod('toBeValidSvgDataUrl', function() {
+  const isSvgDataUrl =
+    typeof this._obj === 'string' &&
+    this._obj.startsWith('data:image/svg+xml');
+  this.assert(
+    isSvgDataUrl,
+    'expected #{this} to be a valid SVG data URL (should start with "data:image/svg+xml")',
+    'expected #{this} not to be a valid SVG data URL'
+  );
+});
+
+chai.Assertion.addMethod('toBeValidPngDataUrl', function() {
+  const isPngDataUrl =
+    typeof this._obj === 'string' && this._obj.startsWith('data:image/png');
+  this.assert(
+    isPngDataUrl,
+    'expected #{this} to be a valid PNG data URL (should start with "data:image/png")',
+    'expected #{this} not to be a valid PNG data URL'
+  );
 });
 
 /**
  * Add custom matchers to TypeScript
  */
 declare global {
-  namespace Vi {
-    interface Matchers<R> {
-      toBeValidDataUrl(): R;
-      toBeValidSvgDataUrl(): R;
-      toBeValidPngDataUrl(): R;
+  namespace Chai {
+    interface Assertion {
+      toBeValidDataUrl(): void;
+      toBeValidSvgDataUrl(): void;
+      toBeValidPngDataUrl(): void;
     }
   }
 }

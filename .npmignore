@@ -2,3 +2,15 @@ src/
 types/
 .prettierrc
 yarn-error.log
+tests/
+examples/
+.travis.yml
+rollup.config.mjs
+vitest.config.mts
+tsconfig.json
+.vscode/
+package-lock.json
+TEST_SETUP_SUMMARY.md
+TESTING_STATUS.md
+TESTING.md
+EXAMPLES_QUICKSTART.md

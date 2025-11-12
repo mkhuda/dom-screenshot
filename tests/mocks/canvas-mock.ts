@@ -1,15 +1,23 @@
 /**
  * Canvas mocking utilities for testing
  */
-import { vi, SinonStub } from 'vitest';
+import { vi } from 'vitest';
 
 /**
  * Mock HTMLCanvasElement.prototype.toDataURL
  */
 export function mockCanvasToDataUrl(
-  returnValue: string = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
-): SinonStub {
-  return vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue(returnValue);
+  pngValue: string = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+  jpegValue: string = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8VAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k='
+): void {
+  vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockImplementation(function(type?: string, quality?: number) {
+    // Return JPEG data URL if type is 'image/jpeg'
+    if (type === 'image/jpeg') {
+      return jpegValue;
+    }
+    // Default to PNG
+    return pngValue;
+  });
 }
 
 /**
@@ -17,8 +25,8 @@ export function mockCanvasToDataUrl(
  */
 export function mockCanvasToBlob(
   returnBlob: Blob = new Blob(['test'], { type: 'image/png' })
-): SinonStub {
-  return vi
+): void {
+  vi
     .spyOn(HTMLCanvasElement.prototype, 'toBlob')
     .mockImplementation((callback: BlobCallback) => {
       // Use setTimeout to simulate async behavior
@@ -26,31 +34,25 @@ export function mockCanvasToBlob(
     });
 }
 
+
 /**
- * Mock canvas context operations
+ * Setup global Canvas context mocking
  */
-export function mockCanvasContext(): {
-  fillRect: SinonStub;
-  drawImage: SinonStub;
-  getImageData: SinonStub;
-} {
-  const mockContext = {
-    fillRect: vi.fn(),
-    drawImage: vi.fn(),
-    getImageData: vi.fn().mockReturnValue({
-      data: new Uint8ClampedArray(4), // RGBA for 1x1 pixel
-    }),
-  };
-
-  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
-    mockContext as any
-  );
-
-  return {
-    fillRect: mockContext.fillRect,
-    drawImage: mockContext.drawImage,
-    getImageData: mockContext.getImageData,
-  };
+export function setupCanvasMocking(): void {
+  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function(this: HTMLCanvasElement, contextId: string) {
+    return {
+      fillRect: vi.fn(),
+      drawImage: vi.fn(),
+      fillStyle: '',
+      strokeStyle: '',
+      lineWidth: 1,
+      globalAlpha: 1,
+      canvas: this,
+      getImageData: vi.fn().mockReturnValue({
+        data: new Uint8ClampedArray(4),
+      }),
+    } as any;
+  });
 }
 
 /**
@@ -78,17 +80,3 @@ export function createValidSvgDataUrl(): string {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
-/**
- * Mock multiple data URLs for different formats
- */
-export function mockCanvasDataUrls(): {
-  png: string;
-  jpeg: string;
-  svg: string;
-} {
-  return {
-    png: createValidPngDataUrl(),
-    jpeg: createValidJpegDataUrl(),
-    svg: createValidSvgDataUrl(),
-  };
-}

@@ -23,6 +23,7 @@ A modern TypeScript library to capture DOM elements as **SVG**, **PNG**, **JPEG*
 ## 📚 Documentation
 
 ### Quick Reference
+- **🎬 Live Demo** → **[Try it now!](https://dom-screenshot-react.vercel.app/)** (no setup needed)
 - **Getting Started** → See below or check [`EXAMPLES_QUICKSTART.md`](./EXAMPLES_QUICKSTART.md)
 - **React Example** → Run the interactive example in `examples/react-app/`
 - **Testing** → See [`TESTING.md`](./TESTING.md) for test setup
@@ -39,6 +40,14 @@ A modern TypeScript library to capture DOM elements as **SVG**, **PNG**, **JPEG*
 | `examples/README.md` | Examples overview |
 | `examples/react-app/README.md` | Detailed React example guide |
 | `tests/README.md` | Test infrastructure details |
+
+---
+
+## 🎬 Live Demo
+
+**Try it now!** → **[dom-screenshot React Demo](https://dom-screenshot-react.vercel.app/)**
+
+Experience the library in action with an interactive React application. Capture UI elements as SVG, PNG, or JPEG with live preview! 🚀
 
 ---
 
@@ -257,6 +266,14 @@ See [`TESTING.md`](./TESTING.md) for detailed testing information.
 ---
 
 ## 💻 Examples
+
+### 🎬 Live Demo
+
+Experience the library instantly without any setup:
+- **[dom-screenshot React Demo](https://dom-screenshot-react.vercel.app/)** - Interactive demo with live preview
+- Supports SVG, PNG, JPEG capture
+- Real-time gallery view
+- Auto-download functionality
 
 ### React Example App
 
@@ -551,4 +568,9 @@ See `TESTING.md` for test setup instructions.
 
 ---
 
-**Ready to capture? Start with the [React example](#-examples) or read the [Quick Start](#-quick-start)!** 📸
+**Ready to capture?**
+- 🎬 Try the **[Live Demo](https://dom-screenshot-react.vercel.app/)** instantly
+- 📖 Read the **[Quick Start](#-quick-start)**
+- 💻 Check the **[React Example](#-examples)**
+
+Let's start capturing! 📸
