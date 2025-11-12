@@ -6,6 +6,12 @@
     "moduleResolution": "node",
     "lib": ["ES2020", "DOM"],
 
+    // Path mapping
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
     // Output settings
     "declaration": true,
     "declarationMap": true,
@@ -40,6 +46,6 @@
     // Skip lib check for faster compilation
     "skipLibCheck": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+  "include": ["src/**/*", "tests/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

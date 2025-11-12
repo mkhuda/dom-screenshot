@@ -64,7 +64,7 @@ export { toSvg, toPng, toJpeg, toBlob, toPixelData };
 /**
  * Render DOM node to SVG data URL
  * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with a SVG image data URL
  */
 function toSvg(node: Node, options?: DomScreenshotOptions): Promise<string> {
@@ -108,7 +108,7 @@ function toSvg(node: Node, options?: DomScreenshotOptions): Promise<string> {
 /**
  * Render DOM node to PNG data URL
  * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with a PNG image data URL
  */
 function toPng(node: Node, options?: DomScreenshotOptions): Promise<string> {
@@ -118,9 +118,7 @@ function toPng(node: Node, options?: DomScreenshotOptions): Promise<string> {
 }
 
 /**
- * Render DOM node to JPEG data URL
- * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with a JPEG image data URL
  */
 function toJpeg(node: Node, options?: DomScreenshotOptions): Promise<string> {
@@ -133,7 +131,7 @@ function toJpeg(node: Node, options?: DomScreenshotOptions): Promise<string> {
 /**
  * Render DOM node to Blob
  * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with a Blob
  */
 function toBlob(node: Node, options?: DomScreenshotOptions): Promise<Blob> {
@@ -146,7 +144,7 @@ function toBlob(node: Node, options?: DomScreenshotOptions): Promise<Blob> {
 /**
  * Render DOM node to PixelData
  * @param node - The DOM Node object to render
- * @param options - Rendering options
+ * @param {DomScreenshotOptions} [options] - Rendering options
  * @returns Promise fulfilled with pixel data array
  */
 function toPixelData(
